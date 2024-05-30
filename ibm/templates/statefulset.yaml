@@ -78,9 +78,6 @@ spec:
         - name: vm.max_map_count
           value: {{ .Values.sysctlVmMaxMapCount | quote }}
         {{- end }}
-        {{- if .Values.fsGroup }}
-        fsGroup: {{ .Values.fsGroup }} # Deprecated value, please use .Values.podSecurityContext.fsGroup
-        {{- end }}
       {{- if and .Values.rbac.create (eq .Values.rbac.serviceAccountName "") }}
       serviceAccountName: "{{ template "opensearch.uname" . }}"
       {{- else }}
@@ -233,7 +230,6 @@ spec:
           - 'chown -R 1000:1000 /usr/share/opensearch/data'
         securityContext:
           runAsUser: 1000
-          fsGroup: 1000
         resources: 
            {{ toYaml .Values.initResources | nindent 10 }}
         volumeMounts:
@@ -256,7 +252,6 @@ spec:
           fi
         securityContext:
           runAsUser: 1000
-          fsGroup: 1000
         resources:
            {{ toYaml .Values.initResources | nindent 10 }}
 {{- end }}
